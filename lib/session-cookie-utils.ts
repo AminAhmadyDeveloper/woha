@@ -6,21 +6,30 @@ import {
   validateSessionToken,
 } from "@/lib/authentication-api";
 
-export async function setSessionTokenCookie(
+export const createSessionExpire = () => {
+  return new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+};
+
+export const getSessionExpired = (expiresAt: Date) => {
+  return expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15;
+};
+
+export const setSessionTokenCookie = async (
   token: string,
-  expiresAt: Date,
-): Promise<void> {
+  expiresAt?: Date,
+): Promise<void> => {
   const _cookies = await cookies();
+
   _cookies.set("session", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    expires: expiresAt,
+    expires: expiresAt ?? createSessionExpire(),
     path: "/",
   });
-}
+};
 
-export async function deleteSessionTokenCookie(): Promise<void> {
+export const deleteSessionTokenCookie = async (): Promise<void> => {
   const _cookies = await cookies();
 
   _cookies.set("session", "", {
@@ -30,9 +39,9 @@ export async function deleteSessionTokenCookie(): Promise<void> {
     maxAge: 0,
     path: "/",
   });
-}
+};
 
-export async function getSession(): Promise<SessionValidationResult> {
+export const getSession = async (): Promise<SessionValidationResult> => {
   const token = await getSessionToken();
   return await validateSessionToken(token);
-}
+};

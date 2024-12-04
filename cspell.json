@@ -4,8 +4,10 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "autoform",
         "libsql",
         "oslojs",
+        "Shadcn",
         "trivago",
         "turbopack",
         "woha"
