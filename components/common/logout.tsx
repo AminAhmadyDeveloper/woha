@@ -1,18 +1,52 @@
 "use client";
 
-import type { FC, PropsWithChildren } from "react";
+import { LogOutIcon } from "lucide-react";
+import type { FC, MouseEventHandler } from "react";
+import { useTransition } from "react";
 
 import { logout } from "@/actions/logout";
+import { useConfirm } from "@/components/common/confirm-dialog";
+import { Switcher } from "@/components/common/switcher";
 import { Button } from "@/components/ui/button";
-import { useSession } from "@/providers/session-provider";
 
-export const Logout: FC<PropsWithChildren> = ({ children }) => {
-  const { session } = useSession();
-  if (!session) return null;
+interface LogoutProps {
+  iconButton?: true;
+}
+
+export const Logout: FC<LogoutProps> = ({ iconButton }) => {
+  const [, startTransition] = useTransition();
+
+  const confirm = useConfirm();
+
+  const onSubmit: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    const isConfirmed = await confirm({
+      title: "Logout",
+      description: "Are you sure you want to logout?",
+      confirmText: "Logout",
+      cancelText: "Cancel",
+    });
+    if (isConfirmed) {
+      e.stopPropagation();
+      e.preventDefault();
+      startTransition(logout);
+    }
+  };
 
   return (
-    <form action={logout}>
-      <Button asChild>{children}</Button>
-    </form>
+    <Switcher selectSecondChild={!!iconButton}>
+      <Button size="sm" type="button" onClick={onSubmit}>
+        Logout
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="mt-auto rounded-lg"
+        aria-label="Logout"
+        onClick={onSubmit}
+      >
+        <LogOutIcon className="size-4 text-primary" />
+      </Button>
+    </Switcher>
   );
 };

@@ -5,6 +5,7 @@ import {
   getSessionToken,
   validateSessionToken,
 } from "@/lib/authentication-api";
+import { env } from "@/lib/env-constants";
 
 export const createSessionExpire = () => {
   return new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
@@ -23,7 +24,7 @@ export const setSessionTokenCookie = async (
   _cookies.set("session", token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     expires: expiresAt ?? createSessionExpire(),
     path: "/",
   });
@@ -35,7 +36,7 @@ export const deleteSessionTokenCookie = async (): Promise<void> => {
   _cookies.set("session", "", {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     maxAge: 0,
     path: "/",
   });

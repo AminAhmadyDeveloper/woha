@@ -1,5 +1,6 @@
 import type { FC, PropsWithChildren } from "react";
 
+import { ConfirmDialogProvider } from "@/components/common/confirm-dialog";
 import { mono, sans } from "@/lib/fonts-utils";
 import { getSession } from "@/lib/session-cookie-utils";
 import { cn } from "@/lib/tailwind-utils";
@@ -17,7 +18,9 @@ const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
       <StylesProvider />
       <body className={cn(mono.variable, sans.variable)}>
         <SessionProvider session={session}>
-          <TRPCProvider>{children}</TRPCProvider>
+          <TRPCProvider>
+            <ConfirmDialogProvider>{children}</ConfirmDialogProvider>
+          </TRPCProvider>
         </SessionProvider>
       </body>
     </html>

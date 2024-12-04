@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+import { env } from "@/lib/env-constants";
+
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   if (request.method === "GET") {
     const response = NextResponse.next();
@@ -11,7 +13,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
         maxAge: 60 * 60 * 24 * 30,
         sameSite: "lax",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: env.NODE_ENV === "production",
       });
     }
     return response;
