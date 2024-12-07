@@ -1,20 +1,27 @@
 "use client";
 
-import { LogOutIcon } from "lucide-react";
-import type { FC, MouseEventHandler } from "react";
-import { useTransition } from "react";
+import type {
+  FC,
+  MouseEventHandler,
+  PropsWithChildren,
+  ReactNode,
+} from "react";
+import { Fragment, useTransition } from "react";
 
 import { logout } from "@/actions/logout";
 import { useConfirm } from "@/components/common/confirm-dialog";
 import { Switcher } from "@/components/common/switcher";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/providers/session-provider";
 
-interface LogoutProps {
-  iconButton?: true;
+interface LogoutProps extends PropsWithChildren {
+  suspense?: ReactNode;
+  fallback?: ReactNode;
 }
 
-export const Logout: FC<LogoutProps> = ({ iconButton }) => {
-  const [, startTransition] = useTransition();
+export const Logout: FC<LogoutProps> = ({ children, fallback, suspense }) => {
+  const [isPending, startTransition] = useTransition();
+  const { session } = useSession();
 
   const confirm = useConfirm();
 
@@ -33,20 +40,14 @@ export const Logout: FC<LogoutProps> = ({ iconButton }) => {
   };
 
   return (
-    <Switcher selectSecondChild={!!iconButton}>
-      <Button size="sm" type="button" onClick={onSubmit}>
-        Logout
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="mt-auto rounded-lg"
-        aria-label="Logout"
-        onClick={onSubmit}
-      >
-        <LogOutIcon className="size-4 text-primary" />
-      </Button>
+    <Switcher selectSecondChild={!session}>
+      <Switcher selectSecondChild={isPending}>
+        <Button asChild onClick={onSubmit}>
+          {children}
+        </Button>
+        <Fragment>{suspense}</Fragment>
+      </Switcher>
+      <Fragment>{fallback}</Fragment>
     </Switcher>
   );
 };
