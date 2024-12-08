@@ -88,7 +88,7 @@ export const invalidateSession = async (sessionId: string): Promise<void> => {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 };
 
-export type SessionUser = Omit<User, "hashedPassword">;
+export type SessionUser = Omit<User, "hashedPassword" | "githubId">;
 
 export type SessionValidationResult =
   | { session: Session; user: SessionUser }
