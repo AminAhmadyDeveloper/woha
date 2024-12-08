@@ -8,7 +8,7 @@ import { For } from "@/components/common/for";
 import { trpc } from "@/providers/trpc-provider";
 
 export const FeaturesList: FC = () => {
-  const [features] = trpc.features.listOfFeatures.useSuspenseQuery();
+  const { data: features } = trpc.features.listOfFeatures.useQuery();
 
   return (
     <For each={features}>

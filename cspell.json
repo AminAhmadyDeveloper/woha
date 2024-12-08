@@ -5,11 +5,13 @@
     "dictionaries": [],
     "words": [
         "autoform",
+        "displaymodes",
         "libsql",
         "oslojs",
         "Shadcn",
         "trivago",
         "turbopack",
+        "webpush",
         "woha"
     ],
     "ignoreWords": [],

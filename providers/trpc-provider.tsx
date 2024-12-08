@@ -25,7 +25,9 @@ export const TRPCProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      <TanstackQueryProvider client={queryClient}>
+        {children}
+      </TanstackQueryProvider>
     </trpc.Provider>
   );
 };
