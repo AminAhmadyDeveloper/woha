@@ -13,7 +13,7 @@ import { db } from "@/server/database";
 import { userTable } from "@/server/database/schema";
 import { registerSchema } from "@/validators/register-validator";
 
-export const login = createServerAction()
+export const register = createServerAction()
   .input(registerSchema)
   .handler(async ({ input: credentials }) => {
     try {
